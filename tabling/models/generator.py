@@ -46,21 +46,12 @@ for member in all_members:
 
 a = DEFAULT_TABLE
 mat = a.slot_matrix
-a.calculateConflicts(members)
-orderedSlots = a.getSlotsByLen()
 MCS = a.getMCS()
 
+a.generate(members)
+#a.printCurrentSlots()
+
 #--------------- END TESTING
-
-
-
-def calculateConflicts(members):
-	for member in members:
-		for day in range(len(member.commitments)):
-			for time in range(len(member.commitments[day])):
-				if member.commitments[day][time]:
-					slot = DEFAULT_TABLE.getSlotFromTup((day,time))
-					slot.conflicts += 1
 
 
 """

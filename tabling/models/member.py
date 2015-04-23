@@ -1,4 +1,4 @@
-positions = { 'ch' : 'Chair', 'cm' : 'Committee Member', 'gm' : 'General Member', 'ex' : 'Executive'}
+positions = { 'of' : 'Chair', 'cm' : 'Committee Member', 'gm' : 'General Member', 'ex' : 'Executive'}
 days = { 'M' : 0, 'T' : 1, 'W' : 2, 'R' : 3, 'F' : 4}
 
 
@@ -42,7 +42,7 @@ class Member(object):
 		self.position = pos
 
 	def isOfficer(self):
-		return self.position == "ch" or self.position == "ex"
+		return self.position == "of" or self.position == "ex"
 
 	def addCommitment(self, slot):
 		day = days[slot.day]
@@ -98,7 +98,7 @@ class Member(object):
 class CommitteeMember(Member):
 
 	def __init__(self, name, committee):
-		Member.__init__(self, name, "cm")
+		Member.__init__(self, name, "cm", [])
 		self.committee = committee
 
 	def __repr__(self):
@@ -107,7 +107,7 @@ class CommitteeMember(Member):
 class Chair(Member):
 
 	def __init__(self, name, committee):
-		Member.__init__(self, name, "ch")
+		Member.__init__(self, name, "of", [])
 		self.committee = committee
 
 	def __repr__(self):
@@ -116,7 +116,7 @@ class Chair(Member):
 class Executive(Member):
 
 	def __init__(self, name, role):
-		Member.__init__(self, name, "ex")
+		Member.__init__(self, name, "ex", [])
 		self.role = role
 
 	def __repr__(self):

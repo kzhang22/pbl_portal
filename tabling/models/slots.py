@@ -44,12 +44,13 @@ class TablingSlot(object):
 
 		They higher the constraint fullment, the lower priority.
 		"""
-		return len(slot.allowed_members) + 5 * len(slot.members)
+		return len(slot.allowed_members) + 90 * len(slot.members)
 
+	def toString(self):
+		return self.day + " " + str(self.time) + ":00-" + str(self.time+1)  + ":00" + " Members: " + str(self.members)
 
 	def printMembers(self):
-		print self.day + " " + str(self.time) + ":00-" + str(self.time+1)  + ":00" + " Members: " + str(self.members)
-
+		print self.toString()
 
 
 	def __repr__(self):
@@ -117,24 +118,37 @@ class Table(object):
 
 #GENERATE TABLING BEGIN
 	def generate(self, members):
+		print "Generating tabling... "
+		self.calculateConflicts(members)
 		while members:
 			try:
 				slot = self.getMCS()
-				print slot
+				#print slot
 
-				#CURRENT PROBLEM: Slot.allowed_members becomes empty before members do
-				#ALSO Most CONSTRAINED SLOT IS ALWAYS SAME AS OF NOW
-				nextMember = random.choice(slot.allowed_members)
+
+				nextMember = None
+				if slot.allowed_members:
+					nextMember = random.choice(slot.allowed_members)
 				if nextMember:
 					members.remove(nextMember)
 					self.removeMember(nextMember)
 					slot.members.append(nextMember)
 				else:
-					#print members
+					#The slot has no more allowed_members left 
+					#(meaning no more remaining members can go into this slot)
 					self.printCurrentSlots()
 					raise Exception
-			except ValueError as e:
-				pass
+			except Exception as e:
+				print "Slot has no allowed_members left " + str(slot)
+				mem = members.pop(0)
+				for day in range(len(mem.commitments)):
+					for time in range(len(mem.commitments[day])):
+						if not mem.commitments[day][time]:
+							slot = self.getSlot(day, time)
+							slot.members.append(mem)
+							self.removeMember(mem)
+
+
 		print("success!")
 
 #-------- Generating Tabling Helpers
