@@ -21,22 +21,6 @@ DEFAULT_TABLE = Table(DEFAULT_DAYS, DEFAULT_TIMES)
 
 
 
-
-
-
-
-
-#kevin = Chair("Kevin", "WD")
-#kevin.addCommitment(SLOT_LIST[0])
-
-#KZ = PMember(name = "Kevin Zhang", committee = "WD", position = "Chair", commitments = kevin.commitments)
-#KZ.save()
-
-#all_members = PMember.Query.all()
-#for mem in all_members:
-#	print mem
-#	print mem.name
-
 #TESTING-------
 all_members = PMember.Query.all()
 members = []
@@ -52,39 +36,6 @@ MCS = a.getMCS()
 
 #--------------- END TESTING
 
-
-
-def calculateConflicts(members):
-	for member in members:
-		for day in range(len(member.commitments)):
-			for time in range(len(member.commitments[day])):
-				if member.commitments[day][time]:
-					slot = DEFAULT_TABLE.getSlotFromTup((day,time))
-					slot.conflicts += 1
-
-
-"""
-def generate(officers, cms):
-	for of in officers:
-		slots = DEFAULT_SLOTS - of.commitments
-		slot = random.sample(slots, 1)[0]
-		slot.add(of)
-
-	#Check invariant
-	try:
-		for slot in DEFAULT_SLOTS:
-			if slot.numMembers() < 1:
-				raise Exception(str(slot) + " does not have an officer")
-
-	except Exception as e:
-		pass
-
-	for cm in cms:
-		slots = DEFAULT_SLOTS - cms
-"""
-
-def getAvailableSlots(commitments, slots):
-	pass
 
 
 #Testing purposes
