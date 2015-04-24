@@ -10,8 +10,12 @@
     body {
         padding-top: 70px;
     }
-
+    #title-div{
+        text-align:center;
+    }
     </style>
+    {% block style %}{% endblock style %}
+    {% block script %}{% endblock script %}
 </head>
 
 <body>
@@ -36,6 +40,8 @@
         <!-- /.container -->
     </nav>
 
-    {% block body %}
-    {% endblock body %}
+    {% block content %}
+    {% endblock content %}
+
+
 </body>

@@ -1,5 +1,76 @@
 {% extends "base.html" %}
 
-{% block body %}
-<h1>Attendance</h1>
-{% endblock body %}
+{% block style %}
+<style type = 'text/css'>
+.main-title{
+	text-align: center;
+}
+#search-input{
+	width:300px;
+}
+.centered-table{
+	text-align:center;
+}
+.centered-table thead th{
+	text-align:center;
+}
+.active-event{
+	color:#55ACEE;
+}
+.event-clickable:hover{
+	cursor:pointer;
+}
+</style>
+{% endblock style %}
+
+{% block script %}
+<script type = 'text/javascript'>
+cm_map = {};
+members = [];
+{% for member in all_members %}
+members.push({'name': "{{member.name}}", 'committee': "{{member.committee}}" });
+{% endfor %}
+
+activeEvent = null;
+$(document).ready(function(){
+	$('.event-clickable').click(function(){
+		if(!$(this).hasClass('active-event')){
+			$(this).addClass('active-event');
+			$(activeEvent).removeClass('active-event');
+			activeEvent = $(this);
+		}
+	});
+});
+</script>
+{% endblock script %}
+
+
+
+{% block content %}
+
+<h1 class = 'main-title'>Attendance</h1>
+<div class = 'row'>
+
+	<div class = 'col-md-4'>
+		<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search Events'></input>
+		<table class = 'table table-striped centered-table'>
+			<thead>
+				<th>Event Name</th>
+			</thead>
+				{% for event in all_events %}
+				<tr>
+					<td class = 'event-clickable'>{{event.name}}</td>
+				</tr>
+				{% endfor %}
+			<tbody>
+			</tbody>
+		</table>
+	</div> <!-- end of table column -->
+	<div class = 'col-md-8'>
+		<h2>Your CMs</h2>
+		<h2>Other CMs</h2>
+	</div>
+
+</div>
+<!-- end or row -->
+{% endblock content %}
