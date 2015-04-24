@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Hi ! </h1>
+<script type="text/javascript">
+  $(function() {
+    $("#submitBtn").click(function() {
+         $.ajax({
+            type: "GET",
+            url: $SCRIPT_ROOT + "/echo/",
+            contentType: "application/json; charset=utf-8",
+            data: { echoValue: $('input[name="echoText"]').val() },
+            success: function(data) {
+                $('#echoResult').text(data.value);
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+              alert(errorThrown);
+            }
+        });     
+    });
+  });
+</script>
+<strong>Enter a value to echo back:</strong>
+<input type="text" size="10" id="echoText" name="echoText">
+<button type="button" id="submitBtn" name="submitBtn">Submit</button><br><br>
+<strong><div id="echoResult"></div></strong>
+
+<script type=text/javascript>
+
+    document.write("<table border='1' rules='rows' cellspacing='0'>");
+    document.write("<tr>");
+    document.write("<th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th>");
+    document.write("</tr>");
+    document.write("</table>");
+
+
+  var jsonData = {{ slots|tojson|safe }};
+  for (var i=0;i<jsonData.length;i++){
+    document.write("<tr>");
+    document.write("<td>" + jsonData[i].time + "</td>");
+    document.write("</tr>");
+  }
+  </script>
+
+{% endblock %}

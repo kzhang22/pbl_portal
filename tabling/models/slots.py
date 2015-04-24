@@ -15,6 +15,7 @@ class TablingSlot(object):
 		self.conflicts = 0
 		self.allowed_members = []
 
+#---- Basic getter and setter methods
 	def add(self, member):
 		self.members.append(member)
 		if member.isOfficer():
@@ -36,6 +37,17 @@ class TablingSlot(object):
 	def numMembers(slot):
 		return len(slot.members)
 
+
+	def getTime(self):
+		"""
+		Returns time as a string formatted in millitary time
+		"""
+		return str(self.time) + ":00 - " + str(self.time+1) + ":00"
+
+
+
+
+#--- Methods to calculate Heuristics for generating tabling
 	@staticmethod
 	def constraintFulfilled(slot):
 		"""
@@ -46,12 +58,16 @@ class TablingSlot(object):
 		"""
 		return len(slot.allowed_members) + 90 * len(slot.members)
 
+
+
+
+
+#---- Useful printing/debugging methods
 	def toString(self):
 		return self.day + " " + str(self.time) + ":00-" + str(self.time+1)  + ":00" + " Members: " + str(self.members)
 
 	def printMembers(self):
 		print self.toString()
-
 
 	def __repr__(self):
 		""" i.e. Wednesday 10:00-11:00
@@ -112,11 +128,10 @@ class Table(object):
 		"""
 
 		return self.slot_matrix[day][time]
-#---------
 
 
 
-#GENERATE TABLING BEGIN
+#-------- GENERATE TABLING BEGIN
 	def generate(self, members):
 		print "Generating tabling... "
 		self.calculateConflicts(members)
@@ -150,6 +165,7 @@ class Table(object):
 
 
 		print("success!")
+
 
 #-------- Generating Tabling Helpers
 
@@ -216,7 +232,36 @@ class Table(object):
 				slot.allowed_members.remove(member)
 				#print "Removed: " + str(member) + " for slot" + str(slot)
 
-#---------
+
+
+
+
+#--------- Helpers to reformat slots for html/JS access
+
+	@staticmethod
+	def convertSlotToDictionary(slot):
+		"""
+		Converts a slot into the format: {'day': 'M', 'time': '11:00 - 12:00', 'members': ['Eric', 'Kevin', 'David']}
+		"""
+		mem_list = []
+		for member in slot.members:
+			mem_list.append(member.name)
+
+		return {'day': slot.day, 'time': slot.getTime(), 'members' : mem_list}
+
+	def prepareSlots(self):
+		"""
+		Returns a list of slots in dictionary format. (JSON?)
+		"""
+		formated_slots = []
+		for slot in self.slot_list:
+			print Table.convertSlotToDictionary(slot)
+			formated_slots.append(Table.convertSlotToDictionary(slot))
+		return formated_slots
+
+
+
+
 
 
 
