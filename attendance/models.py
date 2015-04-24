@@ -1,0 +1,2 @@
+class Member(Object):
+	pass
