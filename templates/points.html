@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Points</h1>
+{% for mid in sorted_mids %}
+<div class = 'member-div'>{{member_dict[mid].name}} earned {{attendance_sums[mid]}}</div>
+{% endfor %}
+{% endblock content %}

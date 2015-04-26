@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style type = 'text/css'>
+.main-title{
+	text-align: center;
+}
+#search-input{
+	width:300px;
+}
+.centered-table{
+	text-align:center;
+}
+.centered-table thead th{
+	text-align:center;
+}
+.active-event{
+	color:#55ACEE;
+}
+.event-clickable:hover{
+	cursor:pointer;
+}
+</style>
+{% endblock style %}
+
+{% block script %}
+<script type = 'text/javascript'>
+attendance_map = {};
+{% for eid in event_dict.keys() %}
+attendance_map[{{eid}}] = {{event_dict[eid].attendance}};
+{% endfor %}
+
+member_dict = {};
+{% for mid in member_dict.keys() %}
+member_dict[{{mid}}] = '{{member_dict[mid].name}}';
+{% endfor %}
+
+
+activeEvent = null;
+$(document).ready(function(){
+	$('.event-clickable').click(function(){
+		if(!$(this).hasClass('active-event')){
+			$(this).addClass('active-event');
+			$(activeEvent).removeClass('active-event');
+			activeEvent = $(this);
+
+			// show people attending this event
+			names = [];
+			attended_ids  = attendance_map[$(this).attr('id')];
+			for (var i =0;i<attended_ids.length;i++){
+				names.push(member_dict[attended_ids[i]]);
+			}
+			$('#attended-list').text(names.toString());
+
+			// move views of people into view by sliding them down
+		}
+	});
+});
+</script>
+{% endblock script %}
+
+
+
+{% block content %}
+
+<h1 class = 'main-title'>Attendance</h1>
+<div class = 'row'>
+
+	<div class = 'col-md-4'>
+		<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search Events'></input>
+		<table class = 'table table-striped centered-table'>
+			<thead>
+				<th>Event Name</th>
+			</thead>
+				{% for eid in event_dict.keys() %}
+				<tr>
+					<td id = '{{eid}}' class = 'event-clickable'>{{event_dict[eid].name}}</td>
+				</tr>
+				{% endfor %}
+			<tbody>
+			</tbody>
+		</table>
+	</div> <!-- end of table column -->
+	<div class = 'col-md-8'>
+		<h2>Attended</h2>
+		<div id = 'attended-list'>
+
+		</div>
+
+
+	</div>
+
+</div>
+<!-- end or row -->
+{% endblock content %}

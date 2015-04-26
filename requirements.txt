@@ -3,3 +3,5 @@ git+https://github.com/dgrtwo/ParsePy.git
 google-api-python-client
 rauth
 Flask-Login
+django-jsonify
+numpy

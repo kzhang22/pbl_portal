@@ -20,24 +20,80 @@
 .event-clickable:hover{
 	cursor:pointer;
 }
+.attendance-cell{
+	text-align:center;
+}
+.attendance-cell:hover{
+	cursor:pointer;
+}
+.confirmed-cell{
+  background-color: #99CC00;
+  opacity: 0.75;
+}
+.unconfirmed-cell{
+	background-color: #CC0000;
+  	opacity: 0.25;
+}
+.hidden{
+	display:none;
+}
+#attendance-table{
+	margin-top:10px;
+}
 </style>
 {% endblock style %}
 
 {% block script %}
 <script type = 'text/javascript'>
-cm_map = {};
-members = [];
-{% for member in all_members %}
-members.push({'name': "{{member.name}}", 'committee': "{{member.committee}}" });
+attendance_map = {};
+{% for eid in event_dict.keys() %}
+attendance_map[{{eid}}] = {{event_dict[eid].attendance}};
 {% endfor %}
+
+member_dict = {};
+{% for mid in member_dict.keys() %}
+member_dict[{{mid}}] = '{{member_dict[mid].name}}';
+{% endfor %}
+
 
 activeEvent = null;
 $(document).ready(function(){
-	$('.event-clickable').click(function(){
-		if(!$(this).hasClass('active-event')){
-			$(this).addClass('active-event');
-			$(activeEvent).removeClass('active-event');
-			activeEvent = $(this);
+	$("#event-search").keyup(function(){
+		$('.hidden:not(.attendance-row)').each(function(){
+			$(this).removeClass('hidden');
+		});
+		search_value = $(this).val().toLowerCase();
+		console.log(search_value);
+		hidden_eids = [];
+		$('.table-th').each(function(){
+			console.log($(this).text());
+			if($(this).text().toLowerCase().indexOf(search_value) == -1){
+				$(this).addClass('hidden');
+				eid = $(this).attr('id');
+				hidden_eids.push(eid);
+			}
+
+		});
+		$('.attendance-cell').each(function(){
+			id = $(this).attr('id');
+			eid = id.split(',')[1];
+			if(hidden_eids.indexOf(eid) != -1){
+				$(this).addClass('hidden');
+			}
+		});
+	});
+
+	$('#committee-dropdown').change(function(){
+		$('.attendance-row').each(function(){
+				$(this).removeClass('hidden');
+		});
+		selected_committee = $(this).val();
+		if(selected_committee != 0){
+			$('.attendance-row').each(function(){
+				if(!$(this).hasClass(selected_committee)){
+					$(this).addClass('hidden');
+				}
+			})
 		}
 	});
 });
@@ -50,26 +106,60 @@ $(document).ready(function(){
 
 <h1 class = 'main-title'>Attendance</h1>
 <div class = 'row'>
-
-	<div class = 'col-md-4'>
-		<input id = 'search-input' class = 'form-control' type = 'text' placeholder = 'Search Events'></input>
-		<table class = 'table table-striped centered-table'>
-			<thead>
-				<th>Event Name</th>
-			</thead>
-				{% for event in all_events %}
-				<tr>
-					<td class = 'event-clickable'>{{event.name}}</td>
-				</tr>
-				{% endfor %}
-			<tbody>
-			</tbody>
+	<div class = 'col-md-3'>
+		<table>
+			<tr>
+				<td>
+					<input id = 'event-search' type = 'text' class ='form-control' placeholder = 'Search Events' style = 'width:250px'></input>
+				</td>
+				<td>
+					<select id = 'committee-dropdown' class = 'form-control'>
+						  <option value="0">All CMs</option>
+						  <option value="1">Community Service</option>
+						  <option value="2">Consulting</option>
+						  <option value="3">Finance</option>
+						  <option value="4">Historian</option>
+						  <option value="5">Marketing</option>
+						  <option value="6">Professional Development</option>
+						  <option value="7">Publications</option>
+						  <option value="8">Social</option>
+						  <option value="9">Web Development</option>
+						  <option value="10">Internal Networking</option>
+						  <option value="11">Executive</option>
+					</select>
+					<!-- end of dropdown -->
+				</td>
+			</tr>
 		</table>
-	</div> <!-- end of table column -->
-	<div class = 'col-md-8'>
-		<h2>Your CMs</h2>
-		<h2>Other CMs</h2>
 	</div>
+	<!-- END OF COLUMN -->
+
+</div>
+<!-- END OF ROW -->
+<div class = 'row'>
+
+	<div class = 'col-md-10'>
+	<table id = 'attendance-table' class = 'table table-striped table-hover table-bordered'>
+		<thead>
+			<th>Name</th>
+			{% for eid in event_dict.keys() %}
+			<th class = 'table-th' id = '{{eid}}'>{{event_dict[eid].name}}</th>
+			{% endfor %}
+		</thead>
+
+		<tbody>
+			{% for mid in member_dict.keys() %}
+			<tr class = 'attendance-row {{member_dict[mid].cid}}'>
+				<td>{{member_dict[mid].name}}</td>
+				{% for eid in event_dict.keys() %}
+				<td class = 'attendance-cell {% if attendance_matrix[mid][eid] == 2 %}confirmed-cell{% elif attendance_matrix[mid][eid]==1 %}unconfirmed-cell{% endif %}' id = '{{mid}},{{eid}}'></td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	</div>
+
 
 </div>
 <!-- end or row -->
