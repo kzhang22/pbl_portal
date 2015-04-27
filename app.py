@@ -14,18 +14,18 @@ def hello():
 
 @app.route("/attendance")
 def attendance():
-	print 'hi'
-	# all_members = attendance_models.all_members()
-	# all_events = attendance_models.all_events()
-	# all_committees = attendance_models.all_events()
 	member_dict = attendance_models.member_dict()
 	event_dict = attendance_models.event_dict()
 	attendance_matrix = attendance_models.pull_attendance_matrix()
-	print attendance_matrix
 	return render_template("attendance.html", member_dict = member_dict,
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
 		committee_dict = seeds.committee_dict)
+
+# updates a cell (mid, eid) in the attendance matrix
+@app.route('/update_attendance')
+def update_attendance():
+	pass
 
 @app.route("/points")
 def points():
@@ -40,6 +40,7 @@ def points():
 		attendance_matrix = attendance_matrix,
 		attendance_sums = attendance_sums,
 		sorted_mids = sorted_mids)
+
 
 if __name__ == "__main__":
 	# print dir(attendance)

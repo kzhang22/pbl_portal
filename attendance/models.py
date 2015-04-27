@@ -73,8 +73,9 @@ def generate_sample_events():
 					print 'failed '+str(event.name)
 			first = False
 
-def generate_sample_members_and_committees():
+def generate_sample_members():
 	# read csv
+	inv_c = {v:k for k, v in committee_dict.items()}
 	import csv
 	committees = []
 	members = []
@@ -92,17 +93,10 @@ def generate_sample_members_and_committees():
 		member = Member()
 		member.name = members[i]
 		member.committee = committees[i]
+		member.cid = inv_c[committees[i]]
 		member.mid = mid
 		mid += 1
 		print 'saving '+str(member.name)
-		if committees[i] not in seen_committees:
-			committee = Committee()
-			committee.name = committees[i]
-			seen_committees.add(committees[i])
-			committee.cid = cid
-			committee.save()
-			cid += 1
-			print 'saving '+str(committee.name)
 		member.save()
 
 def generate_sample_attendance():
@@ -154,6 +148,10 @@ def save_attendance_matrix(attendance_matrix):
 	am.attendance_matrix = np.asarray(attendance_matrix)
 	am.save()
 
+def reset_attendance_matrix():
+	am = get_attendance_matrix()
+	save_attendance_matrix(am)
+
 """pulling data for views"""
 def get_attendance_data():
 	member_dict = member_dict()
@@ -170,14 +168,12 @@ def get_attendance_matrix():
 	attendance_matrix = np.zeros((max_mid, max_eid))
 	for eid in edict:
 		eslice = edict[eid].attendance
-		attendance_matrix[eslice, eid] = 1
+		attendance_matrix[eslice, eid] = 2 # dont account for 1s
 	return attendance_matrix
 
 if __name__=='__main__':
-	inv_c = {v:k for k, v in committee_dict.items()}
-	members = all_members()
-	for member in members:
-		print member.cid
+	pass
+	# reset_attendance_matrix()
 		# print member.name
 		# try:
 		# 	member.cid = inv_c[member.committee]

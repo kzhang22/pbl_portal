@@ -38,7 +38,7 @@
 	display:none;
 }
 #attendance-table{
-	margin-top:10px;
+	margin-top:5px;
 }
 </style>
 {% endblock style %}
@@ -96,6 +96,9 @@ $(document).ready(function(){
 			})
 		}
 	});
+	$('#save-changes').click(function(){
+
+	});
 });
 </script>
 {% endblock script %}
@@ -129,6 +132,9 @@ $(document).ready(function(){
 					</select>
 					<!-- end of dropdown -->
 				</td>
+			</tr>
+			<tr>
+				<td><button id = 'save-changes' style = 'margin-top:5px' class = 'btn btn-default'>Save Changes</button></td>
 			</tr>
 		</table>
 	</div>
