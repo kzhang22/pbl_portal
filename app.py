@@ -45,4 +45,8 @@ def points():
 if __name__ == "__main__":
 	# print dir(attendance)
 	# print attendance_model.all_members()
-	app.run(debug=True)
+	host = '0.0.0.0'
+	port = 5000
+
+	app.run(host = host, port = port, debug=True)
+	# app.run(debug=True)
