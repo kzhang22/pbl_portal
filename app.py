@@ -10,21 +10,30 @@ import attendance.models
 
 @app.route("/")
 def hello():
-	return render_template("home.html")
+	user_email = None
+	if logged_in:
+		user_email = request.cookies.get('email')
+	return render_template("home.html", user_email = user_email)
 
 """Attendance Views"""
 
 @app.route("/attendance")
 def attendance_index():
+	user_email = None
+	if logged_in:
+		user_email = request.cookies.get('email')
+
 	if not logged_in(request):
 		return render_template('no_permission.html')
+
 	member_dict = cached_member_dict
 	event_dict = cached_event_dict
 	attendance_matrix = cached_attendance_matrix
 	return render_template("attendance.html", member_dict = member_dict,
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
-		committee_dict = seeds.models.committee_dict)
+		committee_dict = seeds.models.committee_dict,
+		user_email = user_email)
 
 # updates a cell (mid, eid) in the attendance matrix
 @app.route('/update_attendance')
@@ -34,6 +43,13 @@ def update_attendance():
 @app.route("/points")
 def points():
 
+	user_email = None
+	if logged_in:
+		user_email = request.cookies.get('email')
+
+	if not logged_in(request):
+		return render_template('no_permission.html')
+
 	attendance_matrix = cached_attendance_matrix
 	member_dict = cached_member_dict
 	attendance_sums = np.sum(attendance_matrix, axis = 1)
@@ -42,7 +58,8 @@ def points():
 	return render_template('points.html', member_dict = member_dict, 
 		attendance_matrix = attendance_matrix,
 		attendance_sums = attendance_sums,
-		sorted_mids = sorted_mids)
+		sorted_mids = sorted_mids,
+		user_email = user_email)
 
 
 """Authentication Views"""
@@ -93,7 +110,7 @@ print 'pulling cached objects'
 cached_member_dict = seeds.models.member_dict()
 cached_event_dict  = attendance.models.event_dict()
 cached_attendance_matrix = attendance.models.pull_attendance_matrix()
-cached_member_email_dict = dict((x.email, x) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
+cached_member_email_dict = dict((x.email, x.mid) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
 member_emails = set(cached_member_email_dict.keys())
 print 'reads will now be lighting fast?'
 
