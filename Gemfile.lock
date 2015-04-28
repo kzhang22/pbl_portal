@@ -52,6 +52,7 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.11.0)
+    pg (0.18.1)
     polyglot (0.3.5)
     rack (1.5.2)
     rack-test (0.6.3)
@@ -111,6 +112,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   font-awesome-rails (= 4.3.0.0)
   jbuilder (~> 1.2)
+  pg
   rails (= 4.0.2)
   sass-rails (~> 4.0.0)
   sdoc
