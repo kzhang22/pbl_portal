@@ -1,6 +1,7 @@
 import config
 import json
 import httplib2
+import os
 """pulls google events"""
 from apiclient.discovery import build
 
@@ -16,10 +17,11 @@ def get_flow():
 	scope = ['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/userinfo.email']
 	scope.append('')
 	from oauth2client.client import OAuth2WebServerFlow
+	redirect_uri = 'http://'+str(os.environ['host_address'])+'/auth_return' # get from environment nvarieblse
 	flow = OAuth2WebServerFlow(client_id = config.client_id,
 									client_secret = config.client_secret,
 									scope = scope,
-									redirect_uri='http://localhost:5000/auth_return')
+									redirect_uri=redirect_uri)
 	return flow
 
 def get_auth_uri(flow):
