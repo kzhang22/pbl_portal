@@ -2,3 +2,4 @@
 *DS_Store
 attendance/.DS_Store
 events/config.py
+events/client_secrets.json
