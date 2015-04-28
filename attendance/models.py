@@ -16,6 +16,8 @@ client_key = 'K2mxfXT12kpvSm4p2rdRt8GU9ipUDaYTfwRsLinK'
 
 register(application_id, client_key)
 
+
+
 class Member(Object):
 	pass
 
@@ -140,6 +142,7 @@ def all_committees():
 def all_events():
 	return Event.Query.all().limit(100000)
 
+
 def pull_attendance_matrix():
 	return np.asarray(AttendanceMatrix.Query.all()[0].attendance_matrix)
 
@@ -170,6 +173,14 @@ def get_attendance_matrix():
 		eslice = edict[eid].attendance
 		attendance_matrix[eslice, eid] = 2 # dont account for 1s
 	return attendance_matrix
+
+
+"""test cached"""
+print 'pulling cached objects'
+cached_member_dict = member_dict()
+cached_event_dict  = event_dict()
+cached_attendance_matrix = pull_attendance_matrix()
+print 'reads will not be lighting fast?'
 
 if __name__=='__main__':
 	pass

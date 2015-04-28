@@ -1,3 +1,4 @@
 *.pyc
 *DS_Store
 attendance/.DS_Store
+events/config.py

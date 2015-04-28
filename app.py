@@ -14,9 +14,9 @@ def hello():
 
 @app.route("/attendance")
 def attendance():
-	member_dict = attendance_models.member_dict()
-	event_dict = attendance_models.event_dict()
-	attendance_matrix = attendance_models.pull_attendance_matrix()
+	member_dict = attendance_models.cached_member_dict
+	event_dict = attendance_models.cached_event_dict
+	attendance_matrix = attendance_models.cached_attendance_matrix
 	return render_template("attendance.html", member_dict = member_dict,
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
@@ -30,8 +30,8 @@ def update_attendance():
 @app.route("/points")
 def points():
 
-	attendance_matrix = attendance_models.pull_attendance_matrix()
-	member_dict = attendance_models.member_dict()
+	attendance_matrix = attendance_models.cached_attendance_matrix
+	member_dict = attendance_models.cached_member_dict
 	attendance_sums = np.sum(attendance_matrix, axis = 1)
 
 	sorted_mids = sorted(member_dict.keys(), key = lambda x: -attendance_sums[x])
