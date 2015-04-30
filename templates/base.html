@@ -3,63 +3,120 @@
     <title>PBL Members Portal</title>
   <script type='text/javascript' src="{{
   url_for('static', filename='jquery.min.js') }}"></script>
-     <link rel="stylesheet" href="{{
-      url_for('static', filename='bootstrap.min.css') }}">
+    <!--  <link rel="stylesheet" href="{{
+      url_for('static', filename='bootstrap.min.css') }}"> -->
     
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- bootcards desktop -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootcards/1.1.2/css/bootcards-desktop.css" rel="stylesheet" type="text/css">
+
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/js/bootcards.min.js"></script>
 
     <style>
-    body {
-        padding-top: 70px;
-    }
     #title-div{
         text-align:center;
     }
     #content-div{
         padding-left:15px;
+        padding-right:15px;
     }
+    #navigation-bar{
+      margin-top:0px;
+    }
+    body{
+        background-color:white;
+    }
+/*    #main-nav-header .navbar-brand{
+        font-weight:normal;
+    }*/
     </style>
     {% block style %}{% endblock style %}
     {% block script %}{% endblock script %}
+
+
 </head>
 
-<body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">[PBL] Members Portal</a><!--
-                <a class="navbar-brand left-pull" href="/help">Instructions</a>-->
-                <a class = 'navbar-brand' href = '/attendance'>Attendance</a>
-                <a class = 'navbar-brand' href = '/points'>Points</a>
-                <a class = 'navbar-brand' href = '/tabling'>Tabling</a>
-                {% if user_email %}
-                <a class = 'navbar-brand' href = '/logout'>Logout</a>
-                <a class = 'navbar-brand' href = '#'>Welcome {{user_email}}</a>
-                {% else %}
-                <a class = 'navbar-brand' href = '/login'>Login</a>
-                {% endif %}
-                
-                
-                <!-- <a class = 'navbar-brand' href = '/cookies'>Cookies</a> -->
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
+
+
+
+
+<body body class="has-bootcards-navbar-double">
+
+ <div id = 'navigation-bar' class="navbar navbar-default navbar-fixed-top bootcards-navbar-double" role="navigation">
+  <div class="container-fluid">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+
+  <a class="navbar-brand" title="Bootcards Starter" href="/">[PBL] Members Portal</a>  
+
+  <!--navbar menu options: shown on desktop only -->
+  <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right bootcards-nav-secondary">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle navbar-link" data-toggle="dropdown" role="button" aria-expanded="false">
+          <i class="fa fa-globe"></i>
+          Languages <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Deutsch</a></li>
+          <li><a href="#"><i class="fa fa-fw fa-check pull-right"></i>English</a></li>
+          <li><a href="#">Espanol</a></li>
+        </ul>
+      </li> 
+
+      {% if user_email %}
+      <li><a href = '/logout'>Logout</a></li>
+      <li><a href = '#'>Welcome {{user_email}}</a></li>
+      {% else %}
+      <li><a href = '/login'>Login</a></li>
+      {% endif %}
+  
+    </ul>
+    <ul class="nav navbar-nav navbar-right bootcards-nav-primary">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+          <i class="fa fa-fw fa-dashboard"></i>
+          Officer Tools <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="/tabling"><i class="fa fa-fw fa-envelope-o"></i> Tabling</a></li>
+          <li><a href="/tabling_setup"><i class="fa fa-fw fa-film"></i> Setup Tabling</a></li>
+          <li><a href="/view_committments"><i class="fa fa-fw fa-file-o"></i>Change Committments</a></li>
+          <li class="divider"></li>
+          <li><a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Separated link</a></li>
+        </ul>
+      </li>
+      
+      <li>
+        <a href="/attendance"><i class="fa fa-fw fa-briefcase"></i>Attendance</a>
+        
+      </li>
+       <li>
+        <a href="/view_committments"><i class="fa fa-fw fa-briefcase"></i>Scheduler</a>
+      </li>
+      <li>
+        <a href="/tabling"><i class="fa fa-fw fa-briefcase"></i>Tabling</a>
+      </li>
+      
+    </ul>
+  </div>
+</div><!--container-fluid-->
+</div>  <!--navbar--> 
 
     <div id = 'content-div'>
     {% block content %}
     {% endblock content %}
     </div>
+
 
 
 </body>

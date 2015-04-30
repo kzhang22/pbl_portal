@@ -1,5 +1,23 @@
 {% extends "base.html" %}
 
+
+{% block style %}
+<style type = 'text/css'>
+.tabling-day-list{
+	float:left;
+	margin: 15px;
+	list-style-type: none;
+}
+.member-list{
+	list-style-type: none;
+}
+.slot-header{
+	color:#55acee;
+}
+</style>
+{% endblock style %}
+
+
 {% block content %}
 
 <title>Berkeley PBL Spring 2015</title>
@@ -9,525 +27,143 @@
 	<center>
 		<h1>Berkeley PBL Members Portal<br>Spring 2015</h1>
 	</center>
-  
-	<h2>Announcements (Week 13)</h2>
+  	
+
+<div class = 'container'>
+
+</div>
+
+	<!-- <h2>Announcements (Week 13)</h2>
 	<ul>
 		<li>PD Apprentice Challenge: Mock interview, cover letter, and resume! <a href="http://www.cs.berkeley.edu/~vazirani/"> Sign Up Here</a></li>
 		<li>WD Elevator Apprentice Challenge: April 17th. <a href = 'http://portal.berkeley-pbl.com:5130'> Start Solving Here</a></li>
 		<li>Thanks for coming out to PBL's <b>10th Anniversary</b></li>
 		<li>Tabling Schedule Updated!</li>
         <li><a href = '#'>Click Here to view past announcements</a></li>
-	</ul>
+	</ul> -->
+
+ <div class = 'row'>
+
+
+
+<div class = 'col-md-4'>
+
+	<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">Announcements</h3>
+      <a class="btn btn-default pull-right" href="#">
+        <i class="fa fa-pencil"></i>
+        See Past Announcements
+      </a>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <p class="list-group-item-text">PD Apprentice Challenge: Mock interview, cover letter, and resume! <a href="http://www.cs.berkeley.edu/~vazirani/"> Sign Up Here</a></p>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">WD Elevator Apprentice Challenge: April 17th. <a href = 'http://blog.berkeley-pbl.com:5130'> Start Solving Here</a></p>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">CS Springland 4.13.2015 at 4pm. Meet at Sproul Hall</p>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">Thanks for coming out to PBL's <b>10th Anniversary</b></p>
+      </div>
+    </div>
+  <div class="panel-footer">
+    <small>Last updated 5.13.15 by Nathalie Nguyen</small>
+  </div>
+  <!-- end of base card -->
+</div>
+
+
+	
+<div class="panel panel-default">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">Events</h3>
+      <a class="btn btn-default pull-right" href="#">
+        <i class="fa fa-pencil"></i>
+        See Calendar
+      </a>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <p class="list-group-item-text">Banquet 5.11.15 (Clark Kerr at 7pm)</p>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">CM Welcome Night 11.23.15 (Haas Andersen Auditorium at 7pm)</p>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">CS Springland 4.13.2015 (Sproul at 8am)</p>
+      </div>
+      <div class="list-group-item">
+        <p class="list-group-item-text">Historian Movie Premiere 5.13.15 (Haas Cheit 210 at 7pm)</p>
+      </div>
+    </div>
+  <div class="panel-footer">
+    <small>Last updated 5.13.15 by Nathalie Nguyen</small>
+  </div>
+  <!-- end of base card -->
+</div>
+	
+
+
+
+<!-- end of col md 4 -->
+</div>
+
+<div class = 'col-md-8'>
+
+<div class="panel panel-default">
+	  <div class="panel-heading clearfix">
+	    <h3 class="panel-title pull-left">Tabling Schedule</h3>
+	      <a class="btn btn-default pull-right" href="#">
+	        <i class="fa fa-check"></i>
+	        Edit Tabling
+	      </a>
+	  </div>
+	  <div class="panel-body">
+	    {% if not tabling_slots %}
+<p>Tabling has not been generated for this week yet</p>
+{% else %}
+
+		{% for day in tabling_slots.keys() %}
+		<ul class = 'list-group tabling-day-list'>
+			{% for slot in tabling_slots[day] %}
+			<li class = 'tabling-slot'>
+				<h4 class = 'slot-header'>{{slot}}</h4>
+				<ul class = 'member-list list-group'>
+					{% for member in slot.members %}
+					<li>{{member.name}}</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+
+
+		</ul>
+		{% endfor %}
 
+{% endif %}
+	  </div>
+	  <div class="panel-footer">
+	    <small>Last updated 5.13.15 at 8:45pm</small>
+	  </div>
+	  <!-- end of tabling card -->
+	</div>
 
+<!-- end of 8 col -->
+</div>
+  
 
-	<h2>Tabling Schedule and Weekly Calendar</h2>
-	<table>
-        <tr>
-            <a href = '#'>Have a conflict with your tabling schedule?</a>
-            <td><img src = "{{url_for('static', filename='images/tabling.png') }}" alt='Tabling Schedule' height="350f"></td>
-            <td><img src="{{url_for('static', filename='images/calendar.png') }}" alt="Weekly Calendar" height="350"></td>
-        </tr>
-    </table>
+  
+<!-- end of row -->
+</div>
 
-<h2>Wall Of Shame</h2>
-<ul>
-    <li>This is to keep people accountable</li>
-</ul>
+<div class = 'row'>
+<h2 class = 'title-center' style = 'text-align:center'>Berkeley PBL Fall 2015 Policies and Expectations</h2>
 
-<h2>Some Thoughts</h2>
-  <ul>
-    <li>Marketing events on the PBL facebook page is problematic because not all chairs will market their events with the same enthusiasm. All events are supposed to be equally important so there should be a standardized way to announce/make people aware of upcoming events.</li>
-    <li>A "course webpage" is a good standardized way of relaying information to CMs and GMs because every event is treated the same. No added sparkle to anything</li>
-    <li>Schedule of lecture has been posted <a href="#announcements">below</a>.</li>
 
-</ul> 
+</div>
 
-<h2>Important Links</h2>
-<ul>
-    <li><a href = '#'>CM Contact Information</a></li>
-    <li><a href = '#'>Chair Contact Information</a></li>
-    <li><a href = '#'>Tabling Exchange Form</a></li>
-</ul>
-
-<h2>CM Expectations</h2>
-  <ul>
-  	<li>Typically, homework assignments are posted on Monday at noon and are due the following Monday at noon.</li>
-	<li>Homework will be self-graded. Solutions will be out on Monday at 12:30 pm, and self-grading is due on Thursday at noon. </li>
-	<li>There will be weekly online homework that is designed to help you get up to speed for the written homework.</li>
-   	<li>Midterm 1: February 17, 5-7 pm</li>
-    <li>Midterm 2: March 31, 5-7 pm</li>
-    <!-- <li>Final exam: TBA</li> -->
-    <li>If you are enrolled in the course you will soon get an email inviting you to sign up for the cs70 piazza account.</li>
-    <li>List of <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/bios/gsi_bio.html">GSIs and readers</a>, including schedule of sections and office hours.
-    </li><li>Please read the complete <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/policies.html">course policies</a>.</li>
-    <li>Some useful <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/advice.html">advice</a>.</li>
-</ul> 
-
-
-
-
-<h2>Homework</h2>
-
-<ul>
-  <li>Homework is released on Monday at 12 PM (noon) and due the following Monday at 12 PM (noon).</li>
-  <li>To submit the homework number N, you should upload a file named <code>hwN.pdf</code> to the instructional servers, and use the command: <code>submit hwN</code></li>
-  <li>Self-grading starts as soon as solutions are released, around Monday at 12 PM (noon), and ends on Thursday at 12 PM (noon).</li>
-  <li>To submit the selfgrades for homework number N, you should upload a file named <code>hwN_grades.txt</code> to the instructional servers, and use the command: <code>submit hwN_grades</code></li>
-  <li>It is recommended that you use the provided grading forms to generate the <code>hwN_grades.txt</code> file.</li>
-</ul>
-
-
-
-<h3>Homework parties</h3>
-
-<b>Times:</b> Friday 2:00-5:00pm in the Wozniak Lounge (430 Soda Hall)
-
-<p>Every week in the Wozniak Lounge, there will
-be a "homework party." This is completely optional. GSIs will be
-present in shifts as will some readers. Students are expected to
-help each other out, and if desired, form ad-hoc "pickup" homework groups
-in the style of a pickup basketball game.</p>
-
-<p>The Woz is a relatively big space and if the weather is nice, we
-can also access the patio outside. But if the room is crowded,
-excercise good judgement and make room for others by leaving if you
-can find an alternative source of assistance. When the room is not
-crowded, people from the class are welcome to just hang out as long as
-they aren't bothering other people. Some social games might be
-available. </p>
-
-
-
-<h3>Homework assignments</h3>
-
-<ul>
-<!-- CourseManager Start hws -->
-<!-- CourseManager Item -11 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw11.pdf">
-        Homework #11
-        (due 13 April 2015)
-    </a>
-    
-    
-        
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/vlab11.html">vlab</a>)
-        
-    
-    
-</li>
-<!-- CourseManager Item -10 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw10.pdf">
-        Homework #10
-        (due 6 April 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol10.pdf">solutions</a>)
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/mid2sol.pdf">midterm 2 solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw10.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -9 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw9.pdf">
-        Homework #9
-        (due 23 March 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol9.pdf">solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw9.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -8 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw8.pdf">
-        Homework #8
-        (due 16 March 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol8.pdf">solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw8.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -7 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw7.pdf">
-        Homework #7
-        (due 9 March 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol7.pdf">solutions</a>)
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/vlab7.html">vlab</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw7.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -6 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw6.pdf">
-        Homework #6
-        (due 2 March 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol6.pdf">solutions</a>)
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/vlab6.html">vlab</a>)
-        
-    
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw6.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -5 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw5.pdf">
-        Homework #5
-        (due 23 February 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol5.pdf">solutions</a>)
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/mid1sol.pdf">midterm 1 solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw5.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -4 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw4.pdf">
-        Homework #4
-        (due 16 February 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol4.pdf">solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw4.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -3 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw3.pdf">
-        Homework #3
-        (due 9 February 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol3.pdf">solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw3.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -2 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw2.pdf">
-        Homework #2
-        (due 2 February 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol2.pdf">solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw2.html">grading form</a>)
-    
-</li>
-<!-- CourseManager Item -1 -->
-
-<li>
-    <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/hw1.pdf">
-        Homework #1
-        (due 26 January 2015)
-    </a>
-    
-    
-        
-    
-        
-            (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/hw/sol1.pdf">solutions</a>)
-        
-    
-    
-        (<a href="https://inst.eecs.berkeley.edu/~cs70/sp15/grade/hw1.html">grading form</a>)
-    
-</li>
-<!-- CourseManager End -->
-</ul>
-
-<h3>Online homework</h3>
-<ul>
-<li> Online homework can be found at <a href="https://cs70sp15.tk/">https://cs70sp15.tk</a>.</li>
-<li> You will need your <a href="https://www.gradescope.com/">gradescope</a> credentials to login.</li>
-<li> If you have multiple gradescope accounts, use the one which is registered for CS 70 on gradescope itself.</li>
-</ul>
-
-
-<h3>Exams</h3>
-<ul>
-<li> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/exam/midterm1.pdf">Midterm 1</a></li>
-<li> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/exam/midterm2.pdf">Midterm 2</a></li>
-</ul>
-
-
-<h2>Notes</h2>
-
-There is no textbook for this class. Instead, there is a set of fairly comprehensive lecture notes. The notes are undergoing a major revision this semester, so notes posted well in advance of lecture may change closer to the date. So make sure you revisit the notes after lecture. Note 0 is background material that you should make sure you understand before the first lecture. Each note may be covered in one or more lectures.  
-
-<ul>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n0.pdf">Note 0</a>: Review of Math Notation</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n1.pdf">Note 1</a>: Propositions and Quantifiers</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n2.pdf">Note 2</a>: Proofs</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n3.pdf">Note 3</a>: Induction</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n4.pdf">Note 4</a>: Stable Marriage</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n5.pdf">Note 5</a>: Graph Theory</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n6.pdf">Note 6</a>: Modular Arithmetic</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n7.pdf">Note 7</a>: Bijections and RSA</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n8.pdf">Note 8</a>: Polynomials</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n9.pdf">Note 9</a>: Error Correcting Codes</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n10.pdf">Note 10</a>: Infinity and Uncountability</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n11.pdf">Note 11</a>: Self-Reference and Uncomputability</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n12.pdf">Note 12</a>: Counting</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n13.pdf">Note 13</a>: Introduction to Discrete Probability</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n14.pdf">Note 14</a>: Conditional Probability</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n15.pdf">Note 15</a>: Two Killer Applications</li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/notes/n16.pdf">Note 16</a>: Random Variables: Distribution and Expectation</li>
-</ul>
-
-
-<h2>Discussion Sections</h2>
-
-Click <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/bios/gsi_bio.html">here</a> for a list of the GSIs and their discussion sections.
-<br><br>
-You are free to choose which discussion section you want to attend. All sections will cover the same basic material, but different GSIs might have different approaches to it.
-
-
-
-<h3>Discussion handouts</h3>
-<ul>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc10W.pdf">Discussion 10W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc10W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc10M.pdf">Discussion 10M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc10M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc9W.pdf">Discussion 9W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc9W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc9M.pdf">Discussion 9M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc9M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc8W.pdf">Discussion 8W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc8W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc8M.pdf">Discussion 8M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc8M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc7W.pdf">Discussion 7W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc7W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc7M.pdf">Discussion 7M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc7M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc6W.pdf">Discussion 6W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc6W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc6M.pdf">Discussion 6M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc6M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc5W.pdf">Discussion 5W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc5W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc4W.pdf">Discussion 4W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc4W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc4M.pdf">Discussion 4M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc4M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc3W.pdf">Discussion 3W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc3W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc3M.pdf">Discussion 3M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc3M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc2W.pdf">Discussion 2W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc2W-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc2M.pdf">Discussion 2M</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc2M-sol.pdf">(solution)</a></li>
-<li><a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc1W.pdf">Discussion 1W</a> <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc1W-sol.pdf">(solution)</a> | <a href="https://inst.eecs.berkeley.edu/~cs70/sp15/section/disc1W-S.pdf">Discussion 1W-S</a> (supplemental)</li>
-</ul>
-
-
-
-<h3>Weekly schedule</h3>
-
-
-<h2><a name="schedule">Schedule of Lectures</a></h2>
-
-<p><strong>January</strong></p>
-
-<ul>
-  <li> Jan 20: Propositions + quantifiers </li>
-  <li> Jan 22: Proofs </li>
-  <li> Jan 27: Induction </li>
-  <li> Jan 29: Induction (continued) + recursion </li>
-</ul>
-
-<p><strong>February</strong></p>
-
-<ul>
-  <li> Feb 3: Stable marriage </li>
-  <li> Feb 5: Graphs, Eulerian tour </li>
-  <li> Feb 10: Trees, hypercubes </li>
-  <li> Feb 12: Modular arithmetic </li>
-  <li> Feb 17: Midterm 1 </li>
-  <li> Feb 19: Bijections, RSA </li>
-  <li> <i>Drop deadline: Feb 20</i> </li>
-  <li> Feb 24: Fermat, RSA, polynomials </li>
-  <li> Feb 26: Polynomials, secret sharing </li>
-</ul>
-
-<p><strong>March</strong></p>
-
-<ul>
-  <li> Mar 3: ECC (error-correcting codes) </li>
-  <li> Mar 5: Infinity + uncountability </li>
-  <li> Mar 10: Uncountability, Godel </li>
-  <li> Mar 12: Counting </li>
-  <li> Mar 17: Probability spaces </li>
-  <li> Mar 19: Conditional probability </li>
-  <li> <i>Spring break: Mar 23-27</i> </li>
-  <li> Mar 31: Midterm 2 </li>
-</ul>
-
-<p><strong>April</strong></p>
-
-<ul>
-  <li> Apr 2: Two killer apps </li>
-  <li> <i>P/F deadline: Apr 3</i></li>
-  <li> Apr 7: Random variables </li>
-  <li> Apr 9: Linearity of expectation, Markov </li>
-  <li> Apr 14: Variance, Chebyshev </li>
-  <li> Apr 16: Some important distributions </li>
-  <li> Apr 21: Continuous probability </li>
-  <li> Apr 23: Inference </li>
-  <li> Apr 28: Zipf's Law and power law distributions </li>
-  <li> Apr 30: How to lie with probability</li>
-</ul>
-
-<p><strong>Final: May 15, 11:30-2:30</strong></p>
-
-
-
-<h2><a name="syllabus">Syllabus</a></h2>
-
-<p>Discrete mathematics and probability theory provide the foundation for many algorithms, concepts, and techniques in the field of Electrical Engineering and Computer Sciences. For example, computer hardware is based on Boolean logic. Induction is closely tied to recursion and is widely used, along with other proof techniques, in theoretical arguments that are critical to understanding the foundations of many things, ranging from algorithms to control, learning, signal processing, communication, and artificial intelligence. Similarly for modular arithmetic and probability theory. CS70 will introduce you to these and other mathematical concepts. By the end of the semester, you should have a firm grasp of the theoretical basis of these concepts and their applications to general mathematical problems. In addition, you will learn how they apply to specific, important problems in the field of EECS. </p>
-
-<p>This course is divided into two main units, each of which will introduce you to a particular mathematical concept as well as its applications. The units are:</p>
-
-<h3>1. Proofs and Discrete Structures</h3>
-
-<p><strong>Proofs</strong></p>
-
-<ul>
-	<li>Propositions and quantifiers</li>
-	<li>Proof techniques: direct proofs, proofs by contradiction and contraposition</li>
-	<li>Induction in its various forms</li>
-	<li>The stable marriage problem </li>
-</ul>
-
-<p><strong>Graphs</strong></p>
-
-<ul>
-	<li>Eulerian tours</li>
-	<li>Trees and hypercubes</li>
-</ul>
-
-<p><strong>Modular Arithmetic</strong></p>
-
-<ul>
-	<li>Congruence relations</li>
-	<li>Euclid's GCD algorithm and multiplicative inverses</li>
-	<li>The RSA cryptosystem</li>
-	<li>Polynomials over finite fields</li>
-	<li>Error correcting codes </li>
-</ul>
-
-<p><strong>Diagonalization and Self-Reference</strong></p>
-
-<ul>
-	<li>Cardinality of infinite sets</li>
-	<li>Cantor's diagonalization proof</li>
-	<li>Uncomputability and the halting problem </li>
-</ul>
-
-<h3>2. Probability Theory</h3>
-
-<p><strong>Counting and Discrete Probability</strong></p>
-
-<ul>
-	<li>Combinatorics and combinatorial proofs</li>
-	<li>Probability spaces and events</li>
-	<li>Conditional probability and Bayes' rule</li>
-	<li>Hashing</li>
-	<li>Random variables and distributions</li>
-	<li>Expectation, variance, and Chebyshev bounds</li>
-	<li>Polling and the law of large numbers</li>
-	<li>Joint distributions and Bayesian inference </li>
-</ul>
-
-<p><strong>Continuous Probability</strong></p>
-
-<ul>
-	<li>Continuous probability spaces and random variables</li>
-	<li>Uniform and exponential distributions</li>
-	<li>Normal distributions and the Central Limit Theorem </li>
-</ul>
-
-{% endblock content %}
+{% endblock  content %}

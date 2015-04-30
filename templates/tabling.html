@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style type = 'text/css'>
+.tabling-day-list{
+	float:left;
+	margin: 15px;
+	list-style-type: none;
+}
+.member-list{
+	list-style-type: none;
+}
+.slot-header{
+	color:#55acee;
+}
+</style>
+{% endblock style %}
+
+
+{% block content %}
+<h1>Tabling Schedule</h1>
+
+{% if not tabling_slots %}
+<h2>Tabling has not been generated for this week yet</h2>
+{% else %}
+
+		{% for day in tabling_slots.keys() %}
+		<ul class = 'list-group tabling-day-list'>
+			{% for slot in tabling_slots[day] %}
+			<li class = 'tabling-slot'>
+				<h4 class = 'slot-header'>{{slot}}</h4>
+				<ul class = 'member-list list-group'>
+					{% for member in slot.members %}
+					<li>{{member.name}}</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+
+
+		</ul>
+		{% endfor %}
+
+{% endif %}
+{% endblock content %}

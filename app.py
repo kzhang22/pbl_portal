@@ -7,13 +7,16 @@ app = Flask(__name__)
 import attendance.models as attendance_models
 import seeds.models
 import attendance.models
+import tabling.generator
 
 @app.route("/")
 def hello():
 	user_email = None
 	if logged_in:
 		user_email = request.cookies.get('email')
-	return render_template("home.html", user_email = user_email)
+
+	global cached_tabling_slots
+	return render_template("home.html", user_email = user_email, tabling_slots = cached_tabling_slots)
 
 """Attendance Views"""
 
@@ -61,6 +64,68 @@ def points():
 		sorted_mids = sorted_mids,
 		user_email = user_email)
 
+"""Events and Calendar"""
+@app.route('/calendar')
+def calendar():
+	return render_template('calendar.html')
+
+"""Tabling Views"""
+
+
+@app.route('/tabling')
+def tabling_index():
+	print 'this is the tabling schedule'
+	global cached_tabling_slots
+	return render_template('tabling.html', tabling_slots = cached_tabling_slots)
+
+@app.route('/tabling_setup')
+def tabling_setup():
+
+	user_email = None
+	if logged_in:
+		user_email = request.cookies.get('email')
+
+	if not logged_in(request):
+		return render_template('no_permission.html')
+
+	tabling_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+	return render_template('tabling_setup.html', user_email = user_email,
+												tabling_days = tabling_days)
+
+@app.route('/tabling_generate')
+def tabling_generate():
+	hours_selected = {}
+	tabling_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+	for day in tabling_days:
+		hours_selected[day] = request.args.get(day)
+	selected_slots = tabling.generator.convert_to_slots(hours_selected)
+	if selected_slots is None:
+		return render_template('tabling_generate.html', message = 'There was an issue')
+
+	"""generate tabling"""
+	global cached_tabling_slots
+	assignments = tabling.generator.generate_tabling(cached_member_dict.keys(), selected_slots)
+	# save tabling schedule
+	tabling.generator.save_tabling_assignments(assignments)
+	tabling_schedule = tabling.generator.get_slots_from_assignments(assignments, cached_member_dict)
+	cached_tabling_slots = tabling_schedule
+	return redirect('/tabling')
+
+@app.route('/view_committments')
+def view_committments():
+	user_email = None
+	if logged_in:
+		user_email = request.cookies.get('email')
+
+	if not logged_in(request):
+		return render_template('no_permission.html')
+
+	mid = cached_member_email_dict[user_email]
+	current_member = cached_member_dict[mid]
+	tabling_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+	return render_template('committments.html', current_member = current_member, 
+												committments = np.matrix(current_member.committments),
+												tabling_days = tabling_days)
 
 """Authentication Views"""
 import auth.models as auth_models
@@ -112,6 +177,7 @@ cached_event_dict  = attendance.models.event_dict()
 cached_attendance_matrix = attendance.models.pull_attendance_matrix()
 cached_member_email_dict = dict((x.email, x.mid) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
 member_emails = set(cached_member_email_dict.keys())
+cached_tabling_slots = tabling.generator.load_tabling_schedule()
 print 'reads will now be lighting fast?'
 
 if __name__ == "__main__":

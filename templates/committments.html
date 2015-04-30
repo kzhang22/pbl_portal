@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block style %}
+<style type = 'text/css'>
+.daylist{
+	float: left;
+	list-style-type: none;
+	margin:35px;
+}
+.committment-cell{
+	border: 1px solid black;
+}
+.busy-cell{
+	background-color:rgba(0, 0, 0, 0.3)
+}
+.zoomed{
+	width:500px;
+	text-align:center;
+}
+.hour-header:hover{
+	cursor:pointer;
+}
+.center-header{
+	text-align:center;
+}
+</style>
+{% endblock style %}
+
+
+{% block script %}
+<script type = 'text/javascript'>
+$(document).ready(function(){
+	$('.hour-header').click(function(){
+		already_zoomed = $(this).hasClass('zoomed');
+		$(".zoomed").each(function(){
+			$(this).removeClass('zoomed');
+		});
+		if(!already_zoomed){
+			$(this).addClass('zoomed').animate();
+		}
+	});
+});
+</script>
+
+{% endblock script %}
+
+{% block content %}
+<h1 class = 'center-header'>{{current_member.name}}'s Schedule</h1>
+
+<table class = 'table table-bordered table-hover'>
+	<thead>
+		<th></th>
+		{% for hour in range(24) %}
+		<th class = 'hour-header'>{{hour % 12}} to {{(hour+1) % 12}}</th>
+		{% endfor %}
+
+	</thead>
+
+	<tbody>
+		{% for i in range(7) %}
+		<tr>
+			<td>{{tabling_days[i]}}</td>
+			{% for j in range(24) %}
+			<td class = 'committment-cell {% if committments[i,j]==1 %} busy-cell {% endif %}'></td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+
+	</tbody>
+</table>
+
+<button class = 'btn btn-default'>Pull Committments from Google</button>
+
+{% endblock content %}

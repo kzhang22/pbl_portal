@@ -1,27 +1,33 @@
 from parse_rest.datatypes import Object
 from parse_rest.connection import register
 from datetime import datetime, date, time
-# application_id = 'Ft2HKqnLE9Pb79j1JLUBYVls7FbFjFsyaqIm0UWJ'
-# client_key = 'hKDW7jREWlaD8MmdL2jLfx9Codcz4I6Jfjnrh5rt'
 
-# David's parse account
-application_id = 'r1fyuEduAW4upM4ZZJsz54iHpg6o7ZT6jWw0Z7We'
-client_key = 'K2mxfXT12kpvSm4p2rdRt8GU9ipUDaYTfwRsLinK'
+import seeds.models
+application_id = seeds.models.application_id
+client_key = seeds.models.client_key
 
 register(application_id, client_key)
 
-	
 
-def generate_sample_committments():
+class TablingSchedule(Object):
 	pass
 
-class Member(Object):
+class TablingSlot(Object):
 	pass
 
-"""pulling data from parse"""
-def all_members():
-	return Member.Query.all().limit(100000)
+def generate_tabling(member_ids, slots):
+	"""
+	places members into the inputted slots. inputted slots are tuples (day, hour)
+	day is 0-6
+	hour is 0-23
+	"""
+	member_dict = seeds.models.member_dict()
+	availability_matrix = np.zeros((len(member_ids), len(slots)))
+	for mid in member_ids:
+		committments = member.committments
+		print sum(committments)
+		print member_dict[mid]
 
 
-if __name__=='__main__':
+def get_mcv(member_ids):
 	pass
