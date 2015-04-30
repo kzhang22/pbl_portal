@@ -1,13 +1,14 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, make_response
 import json
 import numpy as np
-import seeds
+
 app = Flask(__name__)
 
-import attendance.models as attendance_models
-import seeds.models
-import attendance.models
-import tabling.generator
+
+import seeds
+import attendance_models
+import tabling_models
+import auth_models
 
 @app.route("/")
 def hello():
@@ -35,7 +36,7 @@ def attendance_index():
 	return render_template("attendance.html", member_dict = member_dict,
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
-		committee_dict = seeds.models.committee_dict,
+		committee_dict = seeds.committee_dict,
 		user_email = user_email)
 
 # updates a cell (mid, eid) in the attendance matrix
@@ -98,16 +99,16 @@ def tabling_generate():
 	tabling_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 	for day in tabling_days:
 		hours_selected[day] = request.args.get(day)
-	selected_slots = tabling.generator.convert_to_slots(hours_selected)
+	selected_slots = tabling_models.convert_to_slots(hours_selected)
 	if selected_slots is None:
 		return render_template('tabling_generate.html', message = 'There was an issue')
 
 	"""generate tabling"""
 	global cached_tabling_slots
-	assignments = tabling.generator.generate_tabling(cached_member_dict.keys(), selected_slots)
+	assignments = tabling_models.generate_tabling(cached_member_dict.keys(), selected_slots)
 	# save tabling schedule
-	tabling.generator.save_tabling_assignments(assignments)
-	tabling_schedule = tabling.generator.get_slots_from_assignments(assignments, cached_member_dict)
+	tabling_models.save_tabling_assignments(assignments)
+	tabling_schedule = tabling_models.get_slots_from_assignments(assignments, cached_member_dict)
 	cached_tabling_slots = tabling_schedule
 	return redirect('/tabling')
 
@@ -128,7 +129,6 @@ def view_committments():
 												tabling_days = tabling_days)
 
 """Authentication Views"""
-import auth.models as auth_models
 
 @app.route("/login")
 def login():
@@ -172,12 +172,12 @@ CACHING objects for fast reads
 TODO: move into module for clarity
 """
 print 'pulling cached objects'
-cached_member_dict = seeds.models.member_dict()
-cached_event_dict  = attendance.models.event_dict()
-cached_attendance_matrix = attendance.models.pull_attendance_matrix()
+cached_member_dict = seeds.member_dict()
+cached_event_dict  = attendance_models.event_dict()
+cached_attendance_matrix = attendance_models.pull_attendance_matrix()
 cached_member_email_dict = dict((x.email, x.mid) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
 member_emails = set(cached_member_email_dict.keys())
-cached_tabling_slots = tabling.generator.load_tabling_schedule()
+cached_tabling_slots = tabling_models.load_tabling_schedule()
 print 'reads will now be lighting fast?'
 
 if __name__ == "__main__":

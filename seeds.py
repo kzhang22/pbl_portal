@@ -1,11 +1,9 @@
 from parse_rest.datatypes import Object
 from parse_rest.connection import register
 from datetime import datetime, date, time
+import config # get application id and application key
 
-# David's parse account
-application_id = 'r1fyuEduAW4upM4ZZJsz54iHpg6o7ZT6jWw0Z7We'
-client_key = 'K2mxfXT12kpvSm4p2rdRt8GU9ipUDaYTfwRsLinK'
-register(application_id, client_key)
+register(config.application_id, config.client_key)
 
 """hard coded committee stuff should remain in memory"""
 committee_dict = {}
