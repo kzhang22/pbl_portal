@@ -5,7 +5,7 @@ import os
 """pulls google events"""
 from apiclient.discovery import build
 
-pbl_calendar_id = '8bo2rpf4joem2kq9q2n940p1ss@group.calendar.google.com'
+
 
 def test_calendar():
 	from oauth2client.appengine import AppAssertionCredentials
@@ -42,7 +42,7 @@ def get_google_user_info(credentials):
 	user_document = users_service.userinfo().get().execute()
 	return user_document
 
-def get_calendar(credentials):
+def get_google_calendar(credentials):
 	""" 
 	returns a calendar dictionary, except i have no idea what it does, shouldn't it have a list of events?
 	TODO : currently uses oauth2 but i think it should use a service account
@@ -51,7 +51,7 @@ def get_calendar(credentials):
 	http = httplib2.Http()
 	http = credentials.authorize(http)
 	service = build('calendar', 'v3', http=http)
-	calendar = service.calendars().get(calendarId=pbl_calendar_id).execute()
+	calendar = service.calendars().get(calendarId= config.pbl_calendar_id).execute()
 	return calendar
 
 if __name__=='__main__':

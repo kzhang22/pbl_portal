@@ -14,6 +14,10 @@
 .slot-header{
 	color:#55acee;
 }
+#embedded-calendar{
+  width:450px;
+  min-height:300px;
+}
 </style>
 {% endblock style %}
 
@@ -77,35 +81,22 @@
 </div>
 
 
-	
+
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <h3 class="panel-title pull-left">Events</h3>
-      <a class="btn btn-default pull-right" href="#">
-        <i class="fa fa-pencil"></i>
+      <a class="btn btn-default pull-right" href="/calendar">
+        <i class="fa fa-check"></i>
         See Calendar
       </a>
-    </div>
-    <div class="list-group">
-      <div class="list-group-item">
-        <p class="list-group-item-text">Banquet 5.11.15 (Clark Kerr at 7pm)</p>
-      </div>
-      <div class="list-group-item">
-        <p class="list-group-item-text">CM Welcome Night 11.23.15 (Haas Andersen Auditorium at 7pm)</p>
-      </div>
-      <div class="list-group-item">
-        <p class="list-group-item-text">CS Springland 4.13.2015 (Sproul at 8am)</p>
-      </div>
-      <div class="list-group-item">
-        <p class="list-group-item-text">Historian Movie Premiere 5.13.15 (Haas Cheit 210 at 7pm)</p>
-      </div>
-    </div>
-  <div class="panel-footer">
-    <small>Last updated 5.13.15 by Nathalie Nguyen</small>
   </div>
-  <!-- end of base card -->
+  <div class="panel-body">
+   <iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;mode=AGENDA&amp;height=600&amp;wkst=2&amp;bgcolor=%23ffffff&amp;src=8bo2rpf4joem2kq9q2n940p1ss%40group.calendar.google.com&amp;color=%23B1365F&amp;ctz=America%2FLos_Angeles" style=" border-width:0 " frameborder="0" scrolling="no" id = 'embedded-calendar'></iframe>
+  </div>
+  <div class="panel-footer">
+    <small>Updated 5.13.2015 By David Liu</small>
+  </div>
 </div>
-	
 
 
 
