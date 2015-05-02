@@ -33,3 +33,9 @@ def member_name_dict():
 def all_members():
 	return Member.Query.all().limit(100000)
 
+
+
+
+"""CACHING"""
+from werkzeug.contrib.cache import SimpleCache
+cache = SimpleCache()

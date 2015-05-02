@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Scheduler</h1>
+
+<ul>
+{% for event in events %}
+<li><b>{{event.name}}</b></li>
+<li>{{event.start}}</li>
+<li>{{event.end}}</li>
+{% endfor %}
+{% endblock content%}

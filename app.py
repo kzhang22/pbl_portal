@@ -66,9 +66,30 @@ def points():
 		user_email = user_email)
 
 """Events and Calendar"""
-@app.route('/calendar')
-def calendar():
+
+@app.route("/calendar")
+def calendar_view():
 	return render_template('calendar.html')
+
+
+import calendar_models
+@app.route('/scheduler_login')
+def scheduler_login():
+	flow = calendar_models.get_flow()
+	uri = calendar_models.get_auth_uri(flow)
+	return redirect(uri)
+
+
+@app.route('/scheduler_auth_return')
+def scheduler():
+	flow = calendar_models.get_flow()
+	code = request.args.get('code')
+	credentials = auth_models.get_credentials(flow, code)
+	events = calendar_models.get_personal_calendar_events(credentials)
+	return render_template('scheduler.html', events = events)
+
+
+
 
 """Tabling Views"""
 
@@ -167,24 +188,31 @@ def logged_in(request):
 		return True
 	return False
 
-"""
-CACHING objects for fast reads
-TODO: move into module for clarity
-"""
-print 'pulling cached objects'
-cached_member_dict = seeds.member_dict()
-cached_event_dict  = attendance_models.event_dict()
-cached_attendance_matrix = attendance_models.pull_attendance_matrix()
-cached_member_email_dict = dict((x.email, x.mid) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
-member_emails = set(cached_member_email_dict.keys())
-cached_tabling_slots = tabling_models.load_tabling_schedule()
-print 'reads will now be lighting fast?'
+
 
 if __name__ == "__main__":
 	# print dir(attendance)
 	# print attendance_model.all_members()
 	host = '0.0.0.0'
 	port = 5000
+
+
+	"""
+	CACHING objects for fast reads
+	TODO: move into module for clarity
+	"""
+	print 'pulling cached objects'
+	cached_member_dict = seeds.member_dict()
+	cached_event_dict  = attendance_models.event_dict()
+	cached_attendance_matrix = attendance_models.pull_attendance_matrix()
+	cached_member_email_dict = dict((x.email, x.mid) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
+	member_emails = set(cached_member_email_dict.keys())
+	cached_tabling_slots = tabling_models.load_tabling_schedule()
+	print 'reads will now be lighting fast?'
+
+
+
+
 
 	app.run(host = host, port = port, debug=True)
 	# app.run(debug=True)
