@@ -15,6 +15,10 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootcards/1.0.0/js/bootcards.min.js"></script>
 
+<!-- add favicon -->
+<link rel="icon" href="{{
+  url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+
     <style>
     #title-div{
         text-align:center;
@@ -60,13 +64,13 @@
     </button>
   </div>
 
-  <a id = 'left-main-title' class="navbar-brand" title="Bootcards Starter" href="/">[PBL] Members Portal</a>  
+  <a id = 'left-main-title' class="navbar-brand" title="Bootcards Starter" href="/"><span class = 'glyphicon glyphicon-home'></span> [PBL] Members Portal</a>  
 
   <!--navbar menu options: shown on desktop only -->
   <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav navbar-right bootcards-nav-secondary">
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle navbar-link" data-toggle="dropdown" role="button" aria-expanded="false">
+        <!-- <a href="#" class="dropdown-toggle navbar-link" data-toggle="dropdown" role="button" aria-expanded="false">
           <i class="fa fa-globe"></i>
           Languages <span class="caret"></span>
         </a>
@@ -75,8 +79,8 @@
           <li><a href="#"><i class="fa fa-fw fa-check pull-right"></i>English</a></li>
           <li><a href="#">Espanol</a></li>
         </ul>
-      </li> 
-
+      </li>  -->
+      <li><a href = '/handbook'>Handbook</a></li>
       {% if user_email %}
       <li><a href = '/logout'>Logout</a></li>
       <li><a href = '/me'>Welcome {{user_email}}</a></li>
@@ -88,7 +92,7 @@
     <ul class="nav navbar-nav navbar-right bootcards-nav-primary">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-          <i class="fa fa-fw fa-dashboard"></i>
+          <span class="glyphicon glyphicon-pencil">
           Officer Tools <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
@@ -96,23 +100,22 @@
           <li><a href="/tabling_setup"><i class="fa fa-fw fa-film"></i> Setup Tabling</a></li>
           <li><a href="/view_committments"><i class="fa fa-fw fa-file-o"></i>Change Committments</a></li>
           <li class="divider"></li>
-          <li><a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Separated link</a></li>
+          <li><a href="#"><i class="fa fa-fw fa-bar-chart-o"></i>Deliberations</a></li>
         </ul>
       </li>
       
       <li>
-        <a href="/attendance"><i class="fa fa-fw fa-briefcase"></i>Attendance</a>
-        
+       <a href="/attendance"><span class="glyphicon glyphicon-list-alt"></span> Attendance</a>
       </li>
        <li>
-        <a href="/view_committments"><i class="fa fa-fw fa-briefcase"></i>Scheduler</a>
+        <a href="/view_committments"><span class="glyphicon glyphicon-calendar"></span> Scheduler</a>
       </li>
       <li>
         <a href="/scheduler_login"><i class="fa fa-fw fa-briefcase"></i>Scheduler Login</a>
       </li>
-      <li>
+      <!-- <li>
         <a href="/tabling"><i class="fa fa-fw fa-briefcase"></i>Tabling</a>
-      </li>
+      </li> -->
       
     </ul>
   </div>
@@ -124,6 +127,11 @@
     {% endblock content %}
     </div>
 
-
+<div class = 'navbar navbar-default navbar-fixed-bottom'>
+<div class = 'bootcards-desktop-footer clearfix'>
+<p>Created by Spring 2015 Web Development: David Liu, Eric Quach, Kevin Zhang
+</p>
+</div>
+</div>
 
 </body>

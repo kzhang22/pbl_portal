@@ -41,11 +41,13 @@ def reset_attendance_matrix():
 	save_attendance_matrix(am)
 
 
-def update_attendance_matrix(i, j, value):
+def update_attendance_matrix(i, j, value, attendance_matrix):
 	""" updates attendance matrix, setting mat[i,j] = value
 	push result to parse and update cache?
 	"""
-	pass
+	print 'updating attendance_matrix'
+	attendance_matrix[i][j] = value
+	save_attendance_matrix(attendance_matrix)
 
 """test of numpy operations"""
 import numpy as np 

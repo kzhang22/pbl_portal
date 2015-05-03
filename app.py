@@ -14,23 +14,38 @@ import auth_models
 from werkzeug.contrib.cache import SimpleCache
 CACHE = SimpleCache()
 
+"""MAIN ROUTES"""
+@app.route('/cache')
+def cache():
+	global CACHE
+	CACHE = SimpleCache()
+	return redirect('/')
 @app.route("/me")
 def me():
 	user_email = None
 	if logged_in(request):
 		user_email = request.cookies.get('email')
-		current_member = seeds.current_member(request)
+		current_member = seeds.current_member(CACHE, request)
 	else:
 		return render_template('no_permission.html')
 
 	return render_template('me.html', user_email = user_email, current_member = current_member)
 @app.route("/")
-def hello():
+def root_view():
 	user_email = None
 	if logged_in(request):
 		user_email = request.cookies.get('email')
 
 	return render_template("home.html", user_email = user_email, tabling_slots = seeds.tabling_slots(CACHE))
+
+@app.route("/past_announcements")
+def past_announcements():
+	return render_template("past_announcements.html")
+
+@app.route("/handbook")
+def handbook():
+	return render_template('handbook.html')
+
 
 """Attendance Views"""
 
@@ -39,8 +54,8 @@ def attendance_index():
 	user_email = None
 	if logged_in(request):
 		user_email = request.cookies.get('email')
-
-	if not logged_in(request):
+		current_member = seeds.current_member(CACHE, request)
+	else:
 		return render_template('no_permission.html')
 
 	member_dict = seeds.member_dict(CACHE)
@@ -50,12 +65,19 @@ def attendance_index():
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
 		committee_dict = seeds.committee_dict,
-		user_email = user_email)
+		user_email = user_email,
+		current_member = current_member)
 
 # updates a cell (mid, eid) in the attendance matrix
-@app.route('/update_attendance')
-def update_attendance():
-	pass
+@app.route('/attendance_update', methods=['POST'])
+def attendance_update():
+	i = int(request.form['i'])
+	j = int(request.form['j'])
+	value = int(request.form['value'])
+	attendance_matrix = seeds.attendance_matrix(CACHE)
+	attendance_models.update_attendance_matrix(i, j, value, attendance_matrix)
+	CACHE.delete('attendance-matrix')
+	return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 @app.route("/points")
 def points():

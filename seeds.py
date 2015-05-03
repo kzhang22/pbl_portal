@@ -48,10 +48,10 @@ def all_members(cache = None):
 
 
 # assuming logged in
-def current_member(request):
+def current_member(cache, request):
 	user_email = request.cookies.get('email')
-	mid = cached_member_email_dict[user_email]
-	member = cached_member_dict[mid]
+	mid = member_email_dict(cache)[user_email]
+	member = member_dict(cache)[mid]
 
 	return member
 

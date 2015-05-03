@@ -45,6 +45,7 @@
 
 {% block script %}
 <script type = 'text/javascript'>
+my_role = '{{current_member.role}}';
 attendance_map = {};
 {% for eid in event_dict.keys() %}
 attendance_map[{{eid}}] = {{event_dict[eid].attendance}};
@@ -55,7 +56,29 @@ member_dict = {};
 member_dict[{{mid}}] = '{{member_dict[mid].name}}';
 {% endfor %}
 
-
+function ajaxUpdateCell(i, j, value, cell_object, cell_type){
+	$.ajax({
+      url:'/attendance_update',
+      type: "POST",
+      data: {"i": i, "j":j, 'value': value},
+      success:function(data){
+      	$(cell_object).text("");
+      	if(value ==0){
+      		$(cell_object).removeClass(cell_type);
+      		
+      	}
+      	else{
+      		$(cell_object).addClass(cell_type);
+      	}
+      },
+      complete:function(){
+      	
+      },
+      error:function (xhr, textStatus, thrownError){
+        alert('failed');
+      }
+  });
+}
 activeEvent = null;
 $(document).ready(function(){
 	$("#event-search").keyup(function(){
@@ -96,6 +119,41 @@ $(document).ready(function(){
 			})
 		}
 	});
+
+	$('.attendance-cell').click(function(){
+		cell_id = $(this).attr('id');
+		i = cell_id.split(',')[0];
+		j = cell_id.split(',')[1]
+		cell_type = 'bogus';
+		cell_value = 0;
+		if(my_role == 'cm'){
+			cell_type = 'unconfirmed-cell';
+			cell_value = 1;
+		}
+		if(my_role == 'officer'){
+			cell_type = 'confirmed-cell';
+			cell_value = 2;
+		}
+
+		if(! $(this).hasClass(cell_type)){
+			// var changeClass = function(){
+			// 	alert('changing class');
+			// 	$(this).addClass(cell_type);
+			// };
+			//set cell value to cell type
+			ajaxUpdateCell(i, j, cell_value, $(this), cell_type);
+			$(this).text('pending');
+		}
+		else{
+			// var changeClass = function(){
+			// 	$(this).removeClass(cell_type);
+			// };
+			
+			// set cell value to 0
+			ajaxUpdateCell(i,j,0, $(this), cell_type);
+			$(this).text('pending');
+		}
+	});
 	$('#save-changes').click(function(){
 
 	});
@@ -109,7 +167,7 @@ $(document).ready(function(){
 
 <h1 class = 'main-title'>Attendance</h1>
 <div class = 'row'>
-	<div class = 'col-md-3'>
+	<div class = 'col-md-6'>
 		<table>
 			<tr>
 				<td>
