@@ -10,6 +10,9 @@ import attendance_models
 import tabling_models
 import auth_models
 
+"""Caching"""
+from werkzeug.contrib.cache import SimpleCache
+CACHE = SimpleCache()
 
 @app.route("/me")
 def me():
@@ -27,7 +30,7 @@ def hello():
 	if logged_in(request):
 		user_email = request.cookies.get('email')
 
-	return render_template("home.html", user_email = user_email, tabling_slots = seeds.cached_tabling_slots)
+	return render_template("home.html", user_email = user_email, tabling_slots = seeds.tabling_slots(CACHE))
 
 """Attendance Views"""
 
@@ -40,9 +43,9 @@ def attendance_index():
 	if not logged_in(request):
 		return render_template('no_permission.html')
 
-	member_dict = seeds.cached_member_dict
-	event_dict = seeds.cached_event_dict
-	attendance_matrix = seeds.cached_attendance_matrix
+	member_dict = seeds.member_dict(CACHE)
+	event_dict = seeds.event_dict(CACHE)
+	attendance_matrix = seeds.attendance_matrix(CACHE)
 	return render_template("attendance.html", member_dict = member_dict,
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
@@ -64,8 +67,8 @@ def points():
 	if not logged_in(request):
 		return render_template('no_permission.html')
 
-	attendance_matrix = seeds.cached_attendance_matrix
-	member_dict = seeds.cached_member_dict
+	attendance_matrix = seeds.attendance_matrix
+	member_dict = seeds.member_dict(CACHE)
 	attendance_sums = np.sum(attendance_matrix, axis = 1)
 
 	sorted_mids = sorted(member_dict.keys(), key = lambda x: -attendance_sums[x])
@@ -107,7 +110,7 @@ def scheduler():
 @app.route('/tabling')
 def tabling_index():
 	print 'this is the tabling schedule'
-	return render_template('tabling.html', tabling_slots = seeds.cached_tabling_slots)
+	return render_template('tabling.html', tabling_slots = seeds.tabling_slots(CACHE))
 
 @app.route('/tabling_setup')
 def tabling_setup():
@@ -134,11 +137,11 @@ def tabling_generate():
 		return render_template('tabling_generate.html', message = 'There was an issue')
 
 	"""generate tabling"""
-	assignments = tabling_models.generate_tabling(seeds.cached_member_dict.keys(), selected_slots)
+	assignments = tabling_models.generate_tabling(seeds.member_dict(CACHE), selected_slots)
 	# save tabling schedule
 	tabling_models.save_tabling_assignments(assignments)
-	tabling_schedule = tabling_models.get_slots_from_assignments(assignments, seeds.cached_member_dict)
-	seeds.cached_tabling_slots = tabling_schedule
+	tabling_schedule = tabling_models.get_slots_from_assignments(assignments, seeds.member_dict(CACHE))
+	CACHE.delete('tabling-slots')
 	return redirect('/tabling')
 
 @app.route('/view_committments')
@@ -150,8 +153,8 @@ def view_committments():
 	if not logged_in(request):
 		return render_template('no_permission.html')
 
-	mid = seeds.cached_member_email_dict[user_email]
-	current_member = seeds.cached_member_dict[mid]
+	mid = seeds.member_email_dict(CACHE)[user_email]
+	current_member = seeds.member_dict(CACHE)[mid]
 	tabling_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 	return render_template('committments.html', current_member = current_member, 
 												committments = np.matrix(current_member.committments),
@@ -192,7 +195,7 @@ def cookies():
 """ helper methods that should be moved out later"""
 def logged_in(request):
 	cookie_email = request.cookies.get('email')
-	if cookie_email in seeds.member_emails:
+	if cookie_email in seeds.member_emails(CACHE):
 		return True
 	return False
 

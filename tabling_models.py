@@ -37,16 +37,17 @@ def save_tabling_assignments(assignments):
 	ts.assignments = assignments
 	ts.save()
 
-def load_tabling_schedule():
+def load_tabling_schedule(member_dict):
 	""" 
 	loads tabling schedule (the readable version) from parse 
 	"""
 	ts = TablingSchedule.Query.all()
 	if len(ts) == 0:
 		return None
-	ts = ts[0]
+	ts = sorted(ts, key = lambda x: x.createdAt)
+	ts = ts[-1]
 	assignments = ts.assignments
-	return get_slots_from_assignments(assignments, seeds.member_dict())
+	return get_slots_from_assignments(assignments, member_dict)
 
 import re
 def convert_to_slots(hours_selected):
@@ -107,15 +108,14 @@ def convert_assignments_to_readable(assignments, member_dict):
 
 import numpy as np
 import random
-def generate_tabling(member_ids, slots):
+def generate_tabling(member_dict, slots):
 	"""
 	places members into the inputted slots. inputted slots are tuples (day, hour)
 	day is 0-6
 	hour is 0-23
 	"""
-
+	member_ids = member_dict.keys()
 	print 'generating tabling'
-	member_dict = seeds.member_dict()
 	availability_matrix = np.zeros((max(member_ids)+1, len(slots)))
 	for mid in member_ids:
 		member = member_dict[mid]
