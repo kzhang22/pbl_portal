@@ -51,21 +51,25 @@ def handbook():
 
 @app.route("/attendance")
 def attendance_index():
-	user_email = None
-	if logged_in(request):
-		user_email = request.cookies.get('email')
-		current_member = seeds.current_member(CACHE, request)
-	else:
-		return render_template('no_permission.html')
+
+	"""THIS WAS A HACK TO ALLOW CHAIR TO MARK ATTENDANCE FOR BANQUET"""
+	# user_email = None
+	# if logged_in(request):
+	# 	user_email = request.cookies.get('email')
+	# 	current_member = seeds.current_member(CACHE, request)
+	# else:
+	# 	return render_template('no_permission.html')
 
 	member_dict = seeds.member_dict(CACHE)
 	event_dict = seeds.event_dict(CACHE)
 	attendance_matrix = seeds.attendance_matrix(CACHE)
+
+	current_member = member_dict[seeds.member_email_dict(CACHE)['davidbliu@gmail.com']]
 	return render_template("attendance.html", member_dict = member_dict,
 		event_dict = event_dict,
 		attendance_matrix = attendance_matrix,
 		committee_dict = seeds.committee_dict,
-		user_email = user_email,
+		# user_email = user_email,
 		current_member = current_member)
 
 # updates a cell (mid, eid) in the attendance matrix

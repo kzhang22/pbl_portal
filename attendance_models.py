@@ -51,9 +51,9 @@ def update_attendance_matrix(i, j, value, attendance_matrix):
 
 """test of numpy operations"""
 import numpy as np 
-def get_attendance_matrix():
+def get_attendance_matrix(member_dict):
 	edict = event_dict()
-	mdict = member_dict()
+	mdict = member_dict
 	max_eid = max(edict.keys())+1
 	max_mid = max(mdict.keys())+1
 	attendance_matrix = np.zeros((max_mid, max_eid))
@@ -66,7 +66,13 @@ def get_attendance_matrix():
 
 
 if __name__=='__main__':
-	print seeds.all_members()
+	# print seeds.all_members()
+	from werkzeug.contrib.cache import SimpleCache
+	cache = SimpleCache()
+	member_dict = seeds.member_dict(cache)
+	am = get_attendance_matrix(member_dict)
+	save_attendance_matrix(am)
+	print 'updated am'
 	# reset_attendance_matrix()
 		# print member.name
 		# try:
