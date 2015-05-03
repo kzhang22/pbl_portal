@@ -8,7 +8,7 @@
     
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-<link href = 'http://bootswatch.com/yeti/bootstrap.min.css' rel = 'stylesheet'>
+<link href = 'http://bootswatch.com/paper/bootstrap.min.css' rel = 'stylesheet'>
 <!-- bootcards desktop -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootcards/1.1.2/css/bootcards-desktop.css" rel="stylesheet" type="text/css">
 
@@ -29,9 +29,9 @@
     body{
         background-color:white;
     }
-    #left-main-title{
+/*    #left-main-title{
       color:white;
-    }
+    }*/
 /*    #main-nav-header .navbar-brand{
         font-weight:normal;
     }*/
@@ -79,7 +79,7 @@
 
       {% if user_email %}
       <li><a href = '/logout'>Logout</a></li>
-      <li><a href = '#'>Welcome {{user_email}}</a></li>
+      <li><a href = '/me'>Welcome {{user_email}}</a></li>
       {% else %}
       <li><a href = '/login'>Login</a></li>
       {% endif %}

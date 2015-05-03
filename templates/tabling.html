@@ -10,9 +10,7 @@
 .member-list{
 	list-style-type: none;
 }
-.slot-header{
-	color:#55acee;
-}
+
 </style>
 {% endblock style %}
 
@@ -28,7 +26,7 @@
 		<ul class = 'list-group tabling-day-list'>
 			{% for slot in tabling_slots[day] %}
 			<li class = 'tabling-slot'>
-				<h4 class = 'slot-header'>{{slot}}</h4>
+				<div class = 'slot-header label label-info'>{{slot}}</div>
 				<ul class = 'member-list list-group'>
 					{% for member in slot.members %}
 					<li>{{member.name}}</li>

@@ -2,7 +2,8 @@ from parse_rest.datatypes import Object
 from parse_rest.connection import register
 from datetime import datetime, date, time
 import config # get application id and application key
-
+import attendance_models
+import tabling_models
 register(config.application_id, config.client_key)
 
 """hard coded committee stuff should remain in memory"""
@@ -34,8 +35,33 @@ def all_members():
 	return Member.Query.all().limit(100000)
 
 
+# assuming logged in
+def current_member(request):
+	user_email = request.cookies.get('email')
+	mid = cached_member_email_dict[user_email]
+	member = cached_member_dict[mid]
+
+	return member
+
 
 
 """CACHING"""
 from werkzeug.contrib.cache import SimpleCache
 cache = SimpleCache()
+
+def update_cache(options):
+	pass
+
+
+"""
+CACHING objects for fast reads
+TODO: move into module for clarity
+"""
+print 'pulling cached objects'
+cached_member_dict = member_dict()
+cached_event_dict  = attendance_models.event_dict()
+cached_attendance_matrix = attendance_models.pull_attendance_matrix()
+cached_member_email_dict = dict((x.email, x.mid) for x in [m for m in cached_member_dict.values() if 'email' in dir(m)])
+member_emails = set(cached_member_email_dict.keys())
+cached_tabling_slots = tabling_models.load_tabling_schedule()
+print 'reads will now be lighting fast?'

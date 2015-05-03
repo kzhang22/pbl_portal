@@ -1,1 +1,1 @@
-host_address = loca
+export host_address=localhost:5000
