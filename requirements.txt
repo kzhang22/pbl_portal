@@ -4,4 +4,6 @@ google-api-python-client
 rauth
 Flask-Login
 django-jsonify
+fabric
+boto
 numpy
